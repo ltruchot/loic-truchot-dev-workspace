@@ -1,0 +1,69 @@
+name: Deploy to AWS S3
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-24.04
+  
+    steps:
+      # Get the repository code
+      - uses: actions/checkout@v4
+
+      # Install PNPM
+      - uses: pnpm/action-setup@v4
+
+
+      # Install Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      # Store and restore PNPM store cache
+      - name: Get PNPM store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup PNPM cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+    
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
+      # Build the site
+      - name: Build site
+        run: |
+          pnpm run build
+
+      # Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+
+      # Deploy to S3
+      - name: Deploy to S3
+        run: |
+          aws s3 sync packages/website/dist/ s3://${{ secrets.AWS_S3_REPOSITORY }}/ --delete
+
+      # Invalidate CloudFront cache
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
