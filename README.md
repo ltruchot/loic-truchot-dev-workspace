@@ -1,6 +1,7 @@
 # Loïc Truchot dev workspace
 
-Project containing the modern personal website of french developer Loïc TRUCHOT, build with Astro.
+Project containing the modern [personal website of french developer Loïc TRUCHOT](https://loic.truchot.dev), build with Astro.
+
 
 ## Features
 
