@@ -34,7 +34,7 @@ Turing Awards №1, 1966
 </div>
 
 <div class="abs-br m-6 text-xl">
-  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
+  <a href="https://github.com/ltruchot/loic-truchot-dev-workspace/blob/main/packages/turing-awards/slides.md" target="_blank" class="slidev-icon-btn">
     <carbon:logo-github />
   </a>
 </div>
@@ -188,6 +188,7 @@ BEGIN
   WRITE(F, *, E);
 END.
 ```
+
 --> real world "hello world"
 --> https://fr.wikipedia.org/wiki/Suite_de_Fibonacci
 --> average ?
