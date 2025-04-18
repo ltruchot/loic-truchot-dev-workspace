@@ -15,7 +15,8 @@
     "build": "pnpm --filter @loic-truchot-dev-workspace/website build",
     "dev": "pnpm --filter @loic-truchot-dev-workspace/website dev",
     "preview": "pnpm --filter @loic-truchot-dev-workspace/website preview",
-    "lint:fix": "eslint --cache --fix --debug "
+    "lint:fix": "eslint --cache --fix --debug ",
+    "turing-awards": "pnpm --filter @loic-truchot-dev-workspace/turing-awards dev"
   },
   "devDependencies": {
     "@eslint/css": "0.6.0",
